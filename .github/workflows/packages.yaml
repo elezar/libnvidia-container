@@ -16,6 +16,13 @@
 name: image
 
 on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+    branches:
+      - main
+      - release-*
   push:
     branches:
       - main
@@ -33,6 +40,16 @@ jobs:
           - centos7-aarch64
           - centos7-x86_64
           - centos8-ppc64le
+        is-pr: ${{github.event_name == 'pull_request'}}
+        exclude:
+          - is-pr: true
+            package: ubuntu18.04-arm64
+          - is-pr: true
+            package: ubuntu18.04-ppc64le
+          - is-pr: true
+            package: centos7-aarch64
+          - is-pr: true
+            package: centos8-ppc64le
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
